@@ -1,0 +1,862 @@
+<title>같이시켜 체험판</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: one phone-width column, screens swap in place; an action bar fixed at the bottom. */
+/* Team brand tone: cream #F8F3EA, navy #0B1957, blue #5784E6, sky #D1E8FF */
+:root {
+  --bg: #F8F3EA;
+  --surface: #FFFFFF;
+  --sunk: #EFE8DB;
+  --fg: #0B1957;
+  --muted: #5B627E;
+  --line: #E4DCCC;
+  --accent: #3D67CF;
+  --accent-soft: #D1E8FF;
+  --btn-bg: #0B1957;
+  --btn-fg: #FFFFFF;
+  --ink-bg: #0B1957;
+  --ink-fg: #F8F3EA;
+  --ink-muted: #B8C2E0;
+  --ink-hi: #D1E8FF;
+  --ink-hi-fg: #0B1957;
+  --bar: #5784E6;
+  --off-bg: #E4DCCC;
+  --off-fg: #5B627E;
+  --warn: #A3460F;
+  --font: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A1230; --surface: #121C44; --sunk: #1A2754; --fg: #F3EEE4; --muted: #A9B1CE; --line: #263570;
+    --accent: #93B4F4; --accent-soft: #1D2E66; --btn-bg: #D1E8FF; --btn-fg: #0B1957;
+    --ink-bg: #1C2B6B; --ink-fg: #F8F3EA; --ink-muted: #B8C2E0; --ink-hi: #D1E8FF; --ink-hi-fg: #0B1957;
+    --bar: #6F95EC; --off-bg: #263570; --off-fg: #A9B1CE; --warn: #F2A877; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0A1230; --surface: #121C44; --sunk: #1A2754; --fg: #F3EEE4; --muted: #A9B1CE; --line: #263570;
+  --accent: #93B4F4; --accent-soft: #1D2E66; --btn-bg: #D1E8FF; --btn-fg: #0B1957;
+  --ink-bg: #1C2B6B; --ink-fg: #F8F3EA; --ink-muted: #B8C2E0; --ink-hi: #D1E8FF; --ink-hi-fg: #0B1957;
+  --bar: #6F95EC; --off-bg: #263570; --off-fg: #A9B1CE; --warn: #F2A877; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.app { max-width: 440px; margin: 0 auto; padding-bottom: 150px; }
+h1, h2, h3, p { margin: 0; }
+h1, h2 { text-wrap: balance; }
+button, input { font-family: inherit; font-size: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+
+.top { display: flex; align-items: center; gap: 6px; padding: 14px 0 8px; }
+.back { width: 44px; height: 44px; border: none; background: transparent; border-radius: 22px; display: grid; place-items: center; margin-left: -10px; }
+.top h2 { font-size: 17px; }
+.brand { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+.chip { display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border-radius: 15px; font-size: 13px; font-weight: 700; }
+.chip.dark { background: var(--ink-bg); color: var(--ink-fg); }
+.chip.soft { background: var(--accent-soft); color: var(--accent); }
+.tag { display: inline-block; font-size: 12px; font-weight: 700; border-radius: 6px; padding: 1px 8px; }
+.tag.bm { background: var(--accent-soft); color: var(--accent); }
+.tag.cp { background: var(--ink-bg); color: var(--ink-fg); }
+
+.stack { display: flex; flex-direction: column; gap: 14px; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.lead { font-size: 21px; font-weight: 700; line-height: 1.4; }
+
+.pillars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.pillar { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.pillar b { font-size: 15px; color: var(--accent); }
+.pillar span { font-size: 13px; color: var(--muted); }
+
+.filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.filters button, .chips button { height: 40px; padding: 0 16px; border-radius: 20px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; font-size: 14px; }
+.filters button[aria-pressed="true"], .chips button[aria-pressed="true"] { background: var(--btn-bg); color: var(--btn-fg); border-color: var(--btn-bg); }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.newroom { width: 100%; height: 52px; border-radius: 16px; border: 1.5px dashed var(--accent); background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 15px; }
+
+.room { text-align: left; width: 100%; border: 1px solid var(--line); background: var(--surface); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.room .row { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.room .name { font-size: 17px; font-weight: 700; }
+.left { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 10px; background: var(--btn-bg); color: var(--btn-fg); white-space: nowrap; }
+.seats { display: flex; gap: 6px; align-items: center; }
+.seat { width: 22px; height: 22px; border-radius: 11px; border: 2px solid var(--bar); background: transparent; }
+.seat.on { background: var(--bar); }
+.hero .seat { border-color: var(--ink-hi); }
+.hero .seat.on { background: var(--ink-hi); }
+
+.hero { background: var(--ink-bg); color: var(--ink-fg); border-radius: 20px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.hero .muted { color: var(--ink-muted); }
+.hero .big { font-size: 28px; font-weight: 700; }
+.hero .pill { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 3px 10px; background: var(--ink-hi); color: var(--ink-hi-fg); }
+
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.box .k { font-size: 12px; color: var(--muted); }
+.box .v { font-size: 15px; font-weight: 700; }
+.note { background: var(--accent-soft); border-radius: 14px; padding: 12px 14px; font-size: 13px; display: flex; gap: 10px; align-items: flex-start; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.card-h { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.card h3 { font-size: 15px; }
+.state { font-size: 12px; font-weight: 700; border-radius: 6px; padding: 2px 8px; background: var(--sunk); color: var(--muted); }
+.state.ok { background: var(--accent-soft); color: var(--accent); }
+.flow { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
+.flow li.done { color: var(--muted); text-decoration: line-through; }
+
+.linkbox { display: flex; gap: 8px; align-items: center; background: var(--bg); border-radius: 12px; padding: 8px 8px 8px 12px; }
+.linkbox code { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; color: var(--muted); font-family: ui-monospace, Menlo, monospace; }
+.mini { height: 36px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; font-size: 13px; white-space: nowrap; }
+
+label.f { font-size: 13px; font-weight: 700; }
+.field { width: 100%; height: 50px; border: 1px solid var(--line); border-radius: 12px; padding: 0 12px; background: var(--surface); }
+.field:focus { border-color: var(--accent); }
+.hint { font-size: 12px; color: var(--muted); }
+.warn { font-size: 13px; color: var(--warn); font-weight: 700; }
+.ok-text { font-size: 13px; color: var(--accent); font-weight: 700; }
+.inline { display: flex; gap: 8px; }
+.inline input { flex: 1; min-width: 0; height: 48px; border: 1px solid var(--line); border-radius: 12px; padding: 0 12px; background: var(--surface); }
+.mailwrap { flex: 1; min-width: 0; display: flex; align-items: center; height: 48px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); overflow: hidden; }
+.mailwrap:focus-within { border-color: var(--accent); outline: 3px solid var(--accent); outline-offset: 2px; }
+.mailwrap input { flex: 1; min-width: 0; height: 100%; border: none; padding: 0 4px 0 12px; background: transparent; outline: none; }
+.mailwrap .suffix { flex: none; max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 12px 0 2px; color: var(--muted); font-weight: 500; font-size: 14px; }
+.mailwrap.dim { opacity: .6; }
+#vDomChips button { height: 34px; padding: 0 12px; font-size: 13px; }
+.inline button { height: 48px; padding: 0 14px; border-radius: 12px; border: none; background: var(--ink-bg); color: var(--ink-fg); font-weight: 700; white-space: nowrap; }
+.seg { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.seg button { height: 48px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; }
+.seg button[aria-pressed="true"] { background: var(--btn-bg); color: var(--btn-fg); border-color: var(--btn-bg); }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 13px; padding: 2px; }
+.check input { width: 20px; height: 20px; margin: 0; flex: none; accent-color: var(--accent); }
+.err { color: var(--warn); font-size: 13px; font-weight: 700; }
+.results { display: flex; flex-direction: column; margin-top: 6px; }
+.results button { text-align: left; min-height: 48px; padding: 8px 12px; border: none; border-bottom: 1px solid var(--sunk); background: transparent; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.results button span { font-size: 12px; color: var(--muted); white-space: nowrap; }
+.results button:last-child { border-bottom: none; }
+.linkish { align-self: flex-start; border: none; background: none; padding: 8px 0; color: var(--accent); font-weight: 700; font-size: 13px; }
+.chosen { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--accent-soft); border-radius: 12px; padding: 12px 14px; }
+.chosen > div { min-width: 0; }
+
+.steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.steps li { display: flex; gap: 14px; }
+.steps .rail { display: flex; flex-direction: column; align-items: center; width: 18px; }
+.steps .dot { width: 16px; height: 16px; border-radius: 8px; margin-top: 4px; border: 2px solid var(--muted); background: var(--surface); }
+.steps .stem { width: 2px; flex: 1; min-height: 26px; background: var(--line); }
+.steps li:last-child .stem { display: none; }
+.steps li.done .dot { background: var(--fg); border-color: var(--fg); }
+.steps li.done .stem { background: var(--fg); }
+.steps li.now .dot { border: 5px solid var(--accent); }
+.steps .txt { padding-bottom: 14px; }
+.steps li.now .lbl { font-weight: 700; }
+.steps li.todo .lbl { color: var(--muted); }
+.bag { background: var(--bg); border-radius: 12px; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+.bag b { font-size: 21px; color: var(--accent); }
+.result { text-align: center; padding-top: 28px; align-items: center; }
+
+.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 6; background: var(--surface); border-top: 1px solid var(--line);
+  padding: 12px max(16px, env(safe-area-inset-right, 0px)) calc(16px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+}
+.bar-in { max-width: 440px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px; }
+.cta { width: 100%; height: 54px; border: none; border-radius: 16px; background: var(--btn-bg); color: var(--btn-fg); font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+.cta:disabled { background: var(--off-bg); color: var(--off-fg); cursor: not-allowed; }
+.cta.light { background: var(--accent-soft); color: var(--accent); }
+.cta.outline { background: transparent; color: var(--fg); border: 1px solid var(--line); font-size: 15px; height: 48px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(160px + env(safe-area-inset-bottom, 0px)); z-index: 8; background: var(--ink-bg); color: var(--ink-fg); padding: 10px 16px; border-radius: 12px; font-size: 14px; max-width: calc(100% - 32px); }
+</style>
+
+<div class="app">
+
+  <!-- 시작 -->
+  <section id="s-intro" class="stack" style="padding-top: 36px">
+    <div><p class="brand">같이시켜</p><p class="small muted">기숙사생 배달 공동주문</p></div>
+    <p class="chip soft" style="align-self: flex-start">개발 중인 체험판 · 실제 주문은 되지 않아요</p>
+    <h1 style="font-size: 26px; line-height: 1.35">배달앱을 새로 만드는 게 아니라,<br>같이 시킬 사람을 이어줘요</h1>
+    <p class="muted">최소주문금액 때문에 메뉴를 억지로 추가하거나 주문을 포기한 적 있나요? 방장이 배민·쿠팡이츠 함께주문 링크를 올리면, 같은 기숙사 학생들이 그 링크로 들어가 메뉴를 담아요. 메뉴 선택과 결제는 평소 쓰는 배달앱에서 그대로 해요.</p>
+    <div class="pillars">
+      <div class="pillar"><b>찾기</b><span>묻히지 않는 주문방 목록</span></div>
+      <div class="pillar"><b>믿기</b><span>학교 인증한 학생끼리만</span></div>
+      <div class="pillar"><b>잇기</b><span>함께주문 링크로 배달앱 연결</span></div>
+      <div class="pillar"><b>받기</b><span>정해진 픽업 장소, 봉투 번호</span></div>
+    </div>
+    <div class="card">
+      <h3 style="font-size: 16px">이렇게 둘러보세요 (2~3분)</h3>
+      <p>열린 주문방에 참여해 배달앱으로 넘어가 보거나, 직접 함께주문 링크를 붙여넣어 주문방을 열어보세요. 같이시켜에는 결제 정보가 들어가지 않아요.</p>
+      <p class="small muted">체험이 끝나면 1분 설문(7문항)에 답해주세요.</p>
+    </div>
+  </section>
+
+  <!-- 홈 -->
+  <section id="s-home" class="stack" hidden>
+    <div class="top" style="justify-content: space-between">
+      <p class="brand">같이시켜</p>
+      <span class="chip dark" id="hChip">한양대 ERICA</span>
+    </div>
+    <div>
+      <p class="lead">지금 <span id="hDorm">행복기숙사</span>에서<br>열린 주문방 <span id="roomCount" class="num">3</span>개</p>
+      <p class="small muted">학교 인증한 같은 기숙사 학생끼리만 같이 시켜요</p>
+    </div>
+    <button class="newroom" id="newRoom">+ 함께주문 링크로 주문방 열기</button>
+    <div class="filters" id="filters" role="group" aria-label="배달앱 고르기"></div>
+    <div class="stack" id="rooms" style="gap: 12px"></div>
+  </section>
+
+  <!-- 주문방 만들기 -->
+  <section id="s-create" class="stack" hidden>
+    <div class="top">
+      <button class="back" data-go="home" aria-label="뒤로">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h2>주문방 열기</h2>
+    </div>
+    <div>
+      <p class="lead">배달앱에서 만든 함께주문 링크를<br>붙여넣어 주세요</p>
+      <p class="small muted">메뉴 담기와 결제는 그 링크 안에서 이뤄져요</p>
+    </div>
+    <div class="card">
+      <label class="f">어느 배달앱인가요?</label>
+      <div class="seg" id="cApp" role="group" aria-label="배달앱">
+        <button aria-pressed="true" data-app="배민">배달의민족</button>
+        <button aria-pressed="false" data-app="쿠팡이츠">쿠팡이츠</button>
+      </div>
+    </div>
+    <div class="card">
+      <label class="f" for="cLink">함께주문 링크</label>
+      <input class="field" id="cLink" type="text" inputmode="url" autocomplete="off" placeholder="공유 문구나 링크를 그대로 붙여넣기">
+      <p class="hint" id="cLinkHint">배달앱 함께주문에서 공유하기로 복사한 내용을 그대로 붙여넣으면 가게 이름과 배달앱을 자동으로 채워요.</p>
+      <button class="mini" id="cSample" style="align-self: flex-start">예시 공유 문구로 체험해보기</button>
+      <p id="cLinkMsg" hidden></p>
+      <a id="cLinkTest" class="small" href="#" target="_blank" rel="noopener" hidden style="color: var(--accent); font-weight: 700">링크 열어서 확인하기 ↗</a>
+    </div>
+    <div class="card">
+      <div class="card-h"><label class="f" for="cStore">가게 이름</label><span class="state" id="cStoreState" hidden>자동 입력</span></div>
+      <input class="field" id="cStore" type="text" autocomplete="off" maxlength="30" placeholder="링크를 넣으면 자동으로 채워져요">
+      <p class="hint" id="cStoreHint" hidden></p>
+      <div class="card-h"><label class="f">음식 종류</label><span class="state ok" id="cCatState" hidden>자동 선택</span></div>
+      <div class="chips" id="cCat" role="group" aria-label="음식 종류"></div>
+      <p class="hint" id="cCatHint" hidden></p>
+    </div>
+    <div class="card">
+      <label class="f">모집 마감</label>
+      <div class="chips" id="cLeft" role="group" aria-label="모집 마감"></div>
+      <label class="f">최대 인원 (나 포함)</label>
+      <div class="chips" id="cMax" role="group" aria-label="최대 인원"></div>
+    </div>
+  </section>
+
+  <!-- 주문방 -->
+  <section id="s-room" class="stack" hidden>
+    <div class="top">
+      <button class="back" data-go="home" aria-label="뒤로">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h2 id="rTitle">주문방</h2>
+      <span class="tag" id="rTag"></span>
+    </div>
+    <div class="hero">
+      <div class="card-h"><span class="small muted" id="rHost"></span><span class="pill" id="rLeft"></span></div>
+      <p class="big num" id="rPeople"></p>
+      <div class="seats" id="rSeats"></div>
+      <p class="small muted" id="rSub"></p>
+    </div>
+    <div class="grid2">
+      <div class="box"><span class="k">픽업 장소</span><span class="v" id="rPlace">행복기숙사 1층 로비</span></div>
+      <div class="box"><span class="k">음식 종류</span><span class="v" id="rCat"></span></div>
+    </div>
+    <div class="card">
+      <h3>참여 방법</h3>
+      <ol class="flow" id="rFlow"></ol>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>함께주문 링크</h3><span class="tag" id="rTag2"></span></div>
+      <div class="linkbox"><code id="rLink"></code><button class="mini" id="rCopy">복사</button></div>
+      <p class="small muted" id="rLinkNote"></p>
+    </div>
+  </section>
+
+  <!-- 학교 인증 -->
+  <section id="s-verify" class="stack" hidden>
+    <div class="top">
+      <button class="back" id="vBack" aria-label="뒤로">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <h2>학교 인증</h2>
+    </div>
+    <div>
+      <p class="lead">주문방에 참여하거나 열려면<br>한 번만 인증해 주세요</p>
+      <p class="small muted">체험판에서는 실제 인증이 일어나지 않아요. 정식 버전에서는 휴대폰 본인인증이 추가돼요.</p>
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>1. 학교</h3><span class="state" id="vSchoolState">필요</span></div>
+      <div id="vSchoolPick">
+        <input class="field" id="vSchoolQ" type="text" autocomplete="off" placeholder="학교 이름 검색 (예: 한양, 부산대)" aria-label="학교 검색">
+        <div class="results" id="vSchoolList"></div>
+        <button class="linkish" id="vNoSchool">목록에 우리 학교가 없어요</button>
+      </div>
+      <div id="vManual" class="stack" style="gap: 8px" hidden>
+        <label class="f" for="vSchoolManual">학교 이름</label>
+        <input class="field" id="vSchoolManual" type="text" autocomplete="off" maxlength="30" placeholder="예: ○○대학교">
+        <p class="hint">학교 이메일(.ac.kr 또는 .edu)로 인증하고, 운영팀이 확인 후 학교를 목록에 추가해요.</p>
+        <button class="linkish" id="vBackToList">학교 목록에서 찾기</button>
+      </div>
+      <div id="vSchoolChosen" class="chosen" hidden>
+        <div><b id="vSchoolName"></b><p class="small muted" id="vSchoolDomain"></p></div>
+        <button class="mini" id="vSchoolChange">변경</button>
+      </div>
+    </div>
+    <div class="card">
+      <h3>2. 기숙사</h3>
+      <p class="small muted">같은 기숙사 학생끼리 주문방을 보여주고 픽업 장소를 정해요</p>
+      <div class="chips" id="vDormChips"></div>
+      <input class="field" id="vDorm" type="text" autocomplete="off" maxlength="20" placeholder="기숙사 이름 (예: 행복기숙사)" aria-label="기숙사 이름">
+    </div>
+    <div class="card">
+      <div class="card-h"><h3>3. 학교 이메일 인증</h3><span class="state" id="vMailState">필요</span></div>
+      <label for="vMail" class="small muted" id="vMailLabel">학교를 먼저 골라주세요</label>
+      <div class="inline">
+        <div class="mailwrap" id="vMailWrap">
+          <input id="vMail" type="text" inputmode="email" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="아이디@학교메일">
+          <span class="suffix num" id="vMailSuffix" hidden></span>
+        </div>
+        <button id="vMailBtn">코드 받기</button>
+      </div>
+      <div class="chips" id="vDomChips" hidden></div>
+      <p class="small muted" id="vMailFull" hidden></p>
+      <div class="inline" id="vCodeRow" hidden>
+        <input id="vCode" inputmode="numeric" maxlength="6" placeholder="인증번호 6자리" aria-label="인증번호">
+        <button id="vCodeBtn">확인</button>
+      </div>
+      <p class="small muted" id="vMailHint" hidden>체험판이에요. 아무 숫자 6자리나 넣으면 돼요.</p>
+      <p class="err" id="vMailErr" hidden></p>
+    </div>
+    <div class="card">
+      <h3>4. 성별</h3>
+      <p class="small muted">남자동, 여자동 픽업 안내에 사용해요</p>
+      <div class="seg" id="vGender" role="group" aria-label="성별">
+        <button aria-pressed="false" data-g="남자">남자</button>
+        <button aria-pressed="false" data-g="여자">여자</button>
+      </div>
+    </div>
+    <label class="check"><input type="checkbox" id="vAgree"> 학교 이메일과 성별은 매칭과 픽업 안내에만 쓰이고, 다른 참여자에게는 닉네임만 보여요</label>
+  </section>
+
+  <!-- 픽업 -->
+  <section id="s-pickup" class="stack" hidden>
+    <div class="top"><h2>내 주문</h2></div>
+    <div class="hero" style="gap: 6px">
+      <p class="small muted" id="kHead"></p>
+      <p style="font-size: 23px; font-weight: 700; line-height: 1.35" id="kTitle"></p>
+      <p class="small" id="kSub" style="color: var(--ink-hi); font-weight: 700"></p>
+    </div>
+    <div class="card"><ol class="steps" id="kSteps"></ol></div>
+    <div class="card">
+      <div class="box" style="border: none; padding: 0">
+        <span class="k">픽업 포인트</span>
+        <span class="v" id="kPlace">행복기숙사 1층 로비 · 엘리베이터 옆 테이블</span>
+      </div>
+      <div class="bag"><span class="small">내 봉투 번호</span><b id="kBag"></b></div>
+    </div>
+    <div class="note">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; color: var(--accent)"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+      <p id="kPayNote"></p>
+    </div>
+  </section>
+
+  <!-- 완료 -->
+  <section id="s-done" class="stack result" hidden>
+    <span class="chip soft">체험 완료</span>
+    <h1 style="font-size: 26px; line-height: 1.35">음식을 받았어요!</h1>
+    <p class="muted" style="max-width: 300px">체험에 참여해주셔서 감사합니다.<br>써보니 어땠는지 1분 설문으로 알려주세요.</p>
+    <p class="small muted" id="betaNote" style="max-width: 300px" hidden>기숙사에서 실제로 같이 시켜보는 베타테스트 참여자도 모집하고 있어요.</p>
+  </section>
+</div>
+
+<div class="bar" id="bar">
+  <div class="bar-in" id="barIn"></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+// 설문(구글 폼) 주소. 비어 있으면 버튼이 "설문 준비 중"으로 표시돼요.
+var SURVEY_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfPOiBLcXR8LzNnl3JXfupFUjnDVfMHDfA3SygEd7ct3QRWpg/viewform?usp=header";
+// 행복관 베타테스트 신청 폼 주소를 여기에 넣으세요. 비어 있으면 신청 버튼이 보이지 않아요.
+var BETA_URL = "";
+
+var APP_NAME = { "배민": "배달의민족", "쿠팡이츠": "쿠팡이츠" };
+var APP_HOME = { "배민": "https://www.baemin.com", "쿠팡이츠": "https://www.coupangeats.com" };
+var APP_HOSTS = { "배민": ["baemin"], "쿠팡이츠": ["coupang"] };
+
+// 예시 주문방: 링크는 실제 함께주문이 아니라 각 배달앱 홈으로 연결돼요.
+var ROOMS = [
+  { platform: "배민", store: "동대문엽기떡볶이", category: "분식", left: 12, people: 2, max: 4, host: "떡볶이요정", link: APP_HOME["배민"], sample: true },
+  { platform: "쿠팡이츠", store: "쥬씨", category: "음료·디저트", left: 25, people: 1, max: 3, host: "과일주스러버", link: APP_HOME["쿠팡이츠"], sample: true },
+  { platform: "배민", store: "맥도날드", category: "버거", left: 7, people: 3, max: 4, host: "빅맥은못참지", link: APP_HOME["배민"], sample: true }
+];
+// 학교 목록과 메일 도메인은 체험용 예시예요. 실제 서비스 전에 학교별 도메인을 꼭 확인하세요.
+// 하위 도메인(예: g.skku.edu)도 같은 학교로 인정해요.
+var SCHOOLS = [
+  { name: "한양대 ERICA", domains: ["hanyang.ac.kr"], dorms: ["창의관", "행복기숙사", "인재관"] },
+  { name: "한양대 서울캠퍼스", domains: ["hanyang.ac.kr"] },
+  { name: "서울대", domains: ["snu.ac.kr"] },
+  { name: "연세대", domains: ["yonsei.ac.kr"] },
+  { name: "고려대", domains: ["korea.ac.kr"] },
+  { name: "성균관대", domains: ["skku.edu"] },
+  { name: "서강대", domains: ["sogang.ac.kr"] },
+  { name: "이화여대", domains: ["ewha.ac.kr", "ewhain.net"] },
+  { name: "중앙대", domains: ["cau.ac.kr"] },
+  { name: "경희대", domains: ["khu.ac.kr"] },
+  { name: "한국외대", domains: ["hufs.ac.kr"] },
+  { name: "건국대", domains: ["konkuk.ac.kr"] },
+  { name: "동국대", domains: ["dongguk.edu"] },
+  { name: "홍익대", domains: ["hongik.ac.kr"] },
+  { name: "국민대", domains: ["kookmin.ac.kr"] },
+  { name: "서울시립대", domains: ["uos.ac.kr"] },
+  { name: "인하대", domains: ["inha.edu", "inha.ac.kr"] },
+  { name: "아주대", domains: ["ajou.ac.kr"] },
+  { name: "KAIST", domains: ["kaist.ac.kr"] },
+  { name: "POSTECH", domains: ["postech.ac.kr"] },
+  { name: "UNIST", domains: ["unist.ac.kr"] },
+  { name: "GIST", domains: ["gist.ac.kr"] },
+  { name: "부산대", domains: ["pusan.ac.kr"] },
+  { name: "경북대", domains: ["knu.ac.kr"] },
+  { name: "전남대", domains: ["jnu.ac.kr"] },
+  { name: "충남대", domains: ["cnu.ac.kr"] }
+];
+var DEFAULT_PLACE = { school: "한양대 ERICA", dorm: "행복기숙사" };
+function myPlace() {
+  var v = S.v;
+  if (!S.verified) return DEFAULT_PLACE;
+  return { school: v.manual ? v.manualName.trim() : v.school.name, dorm: v.dorm.trim() };
+}
+function domainOk(email) {
+  var v = S.v, at = email.lastIndexOf("@");
+  if (at < 1) return false;
+  var dom = email.slice(at + 1).toLowerCase();
+  if (v.manual) return /\.(ac\.kr|edu)$/.test(dom);
+  return v.school.domains.some(function (d) { return dom === d || dom.slice(-(d.length + 1)) === "." + d; });
+}
+// 아는 학교는 아이디만 받고 @ 뒤를 붙여요. 전체 주소를 붙여넣으면 @ 앞부분만 써요.
+function fullEmail() {
+  var v = S.v, raw = $("vMail").value.trim();
+  if (!raw || !schoolReady()) return "";
+  if (v.manual) return raw;
+  var id = raw.split("@")[0];
+  return id ? id + "@" + v.school.domains[v.domIdx || 0] : "";
+}
+function schoolReady() { var v = S.v; return v.manual ? v.manualName.trim().length >= 2 : !!v.school; }
+var CATS = ["치킨", "피자", "버거", "분식", "한식", "중식", "일식", "음료·디저트", "기타"];
+// 가게 이름에 들어간 단어로 음식 종류를 추측해요. 위에서부터 먼저 맞는 종류를 골라요.
+var CAT_WORDS = [
+  ["치킨", ["치킨", "통닭", "닭강정", "교촌", "bbq", "bhc", "굽네", "네네", "페리카나", "푸라닭", "처갓집", "호식이", "멕시카나", "노랑통닭", "60계", "자담", "가마치", "땅땅"]],
+  ["피자", ["피자", "도미노", "파파존스", "피자헛", "피자스쿨", "반올림", "청년피자", "7번가"]],
+  ["버거", ["버거", "맥도날드", "롯데리아", "맘스터치", "kfc", "프랭크", "노브랜드버거"]],
+  ["분식", ["떡볶이", "엽떡", "엽기", "분식", "김밥", "순대", "신전", "배떡", "국대떡", "청년다방", "튀김", "라볶이", "오뎅", "어묵"]],
+  ["중식", ["짜장", "짬뽕", "중국", "중화", "반점", "탕수육", "마라", "훠궈", "홍콩", "양꼬치"]],
+  ["일식", ["초밥", "스시", "돈까스", "돈가스", "카츠", "라멘", "우동", "소바", "덮밥", "규동", "사케동", "횟집", "회센터"]],
+  ["음료·디저트", ["쥬씨", "카페", "커피", "스타벅스", "메가", "컴포즈", "빽다방", "이디야", "공차", "주스", "버블티", "투썸", "설빙", "베스킨", "배스킨", "디저트", "와플", "도넛", "케이크", "빙수", "마카롱"]],
+  ["한식", ["국밥", "찌개", "백반", "족발", "보쌈", "비빔밥", "도시락", "한솥", "본죽", "죽이야기", "냉면", "감자탕", "제육", "삼겹", "고기", "닭갈비", "찜닭", "쌈밥", "곰탕", "설렁탕", "칼국수", "한식"]]
+];
+function guessCat(store) {
+  var s = store.toLowerCase().replace(/\s/g, "");
+  if (!s) return null;
+  for (var i = 0; i < CAT_WORDS.length; i++) {
+    if (CAT_WORDS[i][1].some(function (w) { return s.indexOf(w) >= 0; })) return CAT_WORDS[i][0];
+  }
+  return null;
+}
+function autoCat() {
+  var c = S.c;
+  if (c.catManual) return;
+  var g = guessCat(c.store);
+  if (g) { c.cat = g; c.catAuto = true; c.catMiss = false; }
+  else { c.catAuto = false; c.catMiss = c.store.trim().length >= 2; }
+}
+var LEFTS = [15, 30, 60];
+var MAXES = [2, 3, 4];
+
+var S = { screen: "intro", filter: "전체", room: null, verified: false, after: null,
+  v: { mail: 0, gender: null, agree: false, school: null, manual: false, manualName: "", dorm: "", q: "" },
+  c: { app: "배민", link: "", store: "", cat: "기타", left: 30, max: 4, storeAuto: false, storeTried: "", catAuto: false, catManual: false, catMiss: false },
+  phase: 0 };
+
+var $ = function (id) { return document.getElementById(id); };
+function esc(s) { return String(s).replace(/[&<>"']/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]; }); }
+function tagClass(p) { return "tag " + (p === "배민" ? "bm" : "cp"); }
+
+function toast(msg) {
+  var t = $("toast"); t.textContent = msg; t.hidden = false;
+  clearTimeout(toast.h); toast.h = setTimeout(function () { t.hidden = true; }, 2400);
+}
+function go(name) {
+  S.screen = name;
+  ["intro", "home", "create", "room", "verify", "pickup", "done"].forEach(function (n) { $("s-" + n).hidden = n !== name; });
+  render();
+  window.scrollTo(0, 0);
+}
+function bar(html) { $("barIn").innerHTML = html; }
+function needVerify(after) { S.after = after; go("verify"); }
+
+function parseLink(raw) {
+  var s = raw.trim();
+  var m = s.match(/https?:\/\/\S+/i);
+  if (!m) return null;
+  try { var u = new URL(m[0]); return (u.protocol === "https:" || u.protocol === "http:") ? u : null; } catch (e) { return null; }
+}
+function linkMatches(u, app) {
+  return APP_HOSTS[app].some(function (h) { return u.hostname.indexOf(h) >= 0; });
+}
+function detectApp(u) {
+  if (!u) return null;
+  if (linkMatches(u, "배민")) return "배민";
+  if (linkMatches(u, "쿠팡이츠")) return "쿠팡이츠";
+  return null;
+}
+// 공유 문구에서 가게 이름 추측: 링크 앞쪽 문장에서 [배달의민족] 같은 표시와 안내 문구를 걷어내요.
+function guessStore(raw) {
+  var text = raw.replace(/https?:\/\/\S+/gi, " ");
+  text = text.replace(/\[[^\]]*\]|【[^】]*】|\([^)]*\)/g, " ");
+  text = text.split(/함께\s*주문|같이\s*주문|공동\s*주문|에서\s+주문|에\s*초대|초대합니다|참여해/)[0];
+  text = text.replace(/배달의민족|배민|쿠팡이츠|쿠팡/g, " ");
+  text = text.replace(/[!~?.,:;'"“”‘’·|]+/g, " ").replace(/\s+/g, " ").trim();
+  text = text.replace(/\s*(에서|의|에)$/, "").trim();
+  return text.length >= 2 && text.length <= 30 ? text : "";
+}
+function onLinkInput(raw) {
+  var c = S.c; c.link = raw;
+  var u = parseLink(raw), app = detectApp(u);
+  if (app) c.app = app;
+  var name = guessStore(raw);
+  if (name && (!c.store.trim() || c.storeAuto)) { c.store = name; c.storeAuto = true; $("cStore").value = name; c.storeTried = "found"; autoCat(); }
+  else if (u && !name) { c.storeTried = c.store.trim() ? "" : "missing"; }
+  else if (!u) { c.storeTried = ""; }
+  render();
+}
+
+/* 홈 */
+function renderHome() {
+  var pl = myPlace();
+  $("hChip").textContent = pl.school; $("hDorm").textContent = pl.dorm;
+  var f = $("filters"); f.innerHTML = "";
+  ["전체", "배민", "쿠팡이츠"].forEach(function (n) {
+    var b = document.createElement("button");
+    b.textContent = n; b.setAttribute("aria-pressed", String(S.filter === n));
+    b.onclick = function () { S.filter = n; render(); };
+    f.appendChild(b);
+  });
+  var list = ROOMS.filter(function (r) { return S.filter === "전체" || r.platform === S.filter; });
+  $("roomCount").textContent = list.length;
+  var box = $("rooms"); box.innerHTML = "";
+  list.forEach(function (r) {
+    var b = document.createElement("button");
+    b.className = "room";
+    var seats = "";
+    for (var i = 0; i < r.max; i++) seats += '<span class="seat' + (i < r.people ? " on" : "") + '"></span>';
+    b.innerHTML =
+      '<div class="row"><div class="stack" style="gap:4px">' +
+      '<span class="' + tagClass(r.platform) + '" style="align-self:flex-start">' + esc(r.platform) + (r.mine ? " · 내가 연 방" : "") + '</span>' +
+      '<span class="name">' + esc(r.store) + '</span>' +
+      '<span class="small muted">' + esc(r.category) + ' · 픽업 ' + esc(pl.dorm) + ' 1층 로비</span></div>' +
+      '<span class="left">' + r.left + '분 남음</span></div>' +
+      '<div class="card-h"><div class="seats">' + seats + '</div>' +
+      '<span class="small muted num">' + r.people + ' / ' + r.max + '명</span></div>';
+    b.setAttribute("aria-label", r.platform + " " + r.store + " 주문방, " + r.people + "명 참여, " + r.left + "분 남음");
+    b.onclick = function () { S.room = r; go("room"); };
+    box.appendChild(b);
+  });
+  bar('<p class="small muted" style="text-align:center">주문방을 눌러 참여하거나, 위에서 직접 열어보세요</p>');
+}
+
+/* 주문방 만들기 */
+function renderCreate() {
+  var c = S.c;
+  Array.prototype.forEach.call($("cApp").children, function (b) { b.setAttribute("aria-pressed", String(c.app === b.dataset.app)); });
+  function chips(id, items, cur, fmt, set) {
+    var el = $(id); el.innerHTML = "";
+    items.forEach(function (it) {
+      var b = document.createElement("button");
+      b.textContent = fmt(it); b.setAttribute("aria-pressed", String(cur === it));
+      b.onclick = function () { set(it); render(); };
+      el.appendChild(b);
+    });
+  }
+  chips("cCat", CATS, c.cat, function (x) { return x; }, function (x) { c.cat = x; c.catManual = true; c.catAuto = false; c.catMiss = false; });
+  $("cCatState").hidden = !c.catAuto;
+  var ch = $("cCatHint");
+  if (c.catAuto) { ch.hidden = false; ch.textContent = "가게 이름을 보고 골랐어요. 다르면 눌러서 바꿔주세요."; }
+  else if (c.catMiss) { ch.hidden = false; ch.textContent = "가게 이름으로 종류를 알 수 없어요. 직접 골라주세요."; }
+  else ch.hidden = true;
+  chips("cLeft", LEFTS, c.left, function (x) { return x + "분 뒤"; }, function (x) { c.left = x; });
+  chips("cMax", MAXES, c.max, function (x) { return x + "명"; }, function (x) { c.max = x; });
+
+  var msg = $("cLinkMsg"), test = $("cLinkTest"), u = c.link ? parseLink(c.link) : null;
+  if (!c.link) { msg.hidden = true; test.hidden = true; }
+  else if (!u) { msg.hidden = false; msg.className = "warn"; msg.textContent = "https://로 시작하는 링크를 붙여넣어 주세요."; test.hidden = true; }
+  else {
+    msg.hidden = false; test.hidden = false; test.href = u.href;
+    if (linkMatches(u, c.app)) { msg.className = "ok-text"; msg.textContent = APP_NAME[c.app] + " 링크를 확인했어요."; }
+    else { msg.className = "warn"; msg.textContent = APP_NAME[c.app] + " 링크가 맞는지 한 번 확인해 주세요."; }
+  }
+  var st = $("cStoreState"), sh = $("cStoreHint");
+  st.hidden = !(c.storeAuto && c.store.trim());
+  if (c.storeAuto && c.store.trim()) { sh.hidden = false; sh.textContent = "공유 문구에서 가게 이름을 가져왔어요. 다르면 직접 고쳐주세요."; }
+  else if (c.storeTried === "missing") { sh.hidden = false; sh.textContent = "링크만으로는 가게 이름을 알 수 없어요. 직접 적어주세요."; }
+  else sh.hidden = true;
+  var ready = !!u && c.store.trim().length > 0;
+  var missing = !u ? "함께주문 링크를 붙여넣어 주세요" : "가게 이름을 적어주세요";
+  bar('<button class="cta" id="cGo"' + (ready ? "" : " disabled") + '>' + (ready ? (S.verified ? "주문방 열기" : "학교 인증하고 주문방 열기") : missing) + '</button>');
+  $("cGo").onclick = function () { if (S.verified) createRoom(); else needVerify("create-submit"); };
+}
+function createRoom() {
+  var c = S.c, u = parseLink(c.link);
+  var r = { platform: c.app, store: c.store.trim(), category: c.cat, left: c.left, people: 1, max: c.max, host: "나", link: u.href, mine: true, joined: true, opened: false };
+  ROOMS.unshift(r); S.room = r; S.filter = "전체";
+  S.c = { app: "배민", link: "", store: "", cat: "기타", left: 30, max: 4, storeAuto: false, storeTried: "", catAuto: false, catManual: false, catMiss: false };
+  $("cLink").value = ""; $("cStore").value = "";
+  go("room");
+  toast("주문방이 열렸어요. " + myPlace().dorm + " 학생들이 링크로 메뉴를 담을 수 있어요");
+}
+
+/* 주문방 */
+function renderRoom() {
+  var r = S.room, app = APP_NAME[r.platform];
+  $("rTitle").textContent = r.store;
+  $("rTag").textContent = r.platform; $("rTag").className = tagClass(r.platform);
+  $("rTag2").textContent = app; $("rTag2").className = tagClass(r.platform);
+  $("rHost").textContent = r.mine ? "내가 연 주문방" : "방장 " + r.host;
+  $("rLeft").textContent = "마감 " + r.left + "분 전";
+  $("rPeople").textContent = "참여 " + r.people + " / " + r.max + "명";
+  var seats = ""; for (var i = 0; i < r.max; i++) seats += '<span class="seat' + (i < r.people ? " on" : "") + '"></span>';
+  $("rSeats").innerHTML = seats;
+  $("rSub").textContent = "메뉴 담기와 결제는 " + app + " 함께주문 안에서 해요";
+  $("rCat").textContent = r.category;
+  $("rPlace").textContent = myPlace().dorm + " 1층 로비";
+  $("rLink").textContent = r.link;
+  $("rLinkNote").textContent = r.sample
+    ? "예시 주문방이라 " + app + " 홈페이지로 연결돼요. 직접 연 방은 붙여넣은 링크로 연결돼요."
+    : "버튼을 누르면 이 링크로 " + app + "이 열려요. 앱이 설치돼 있으면 앱으로 넘어가요.";
+
+  var flow = r.mine
+    ? ["함께주문 링크를 올렸어요", app + "에서 내 메뉴 담기", "참여자가 다 모이면 모집 마감", app + "에서 주문하고 픽업 안내 받기"]
+    : ["학교 인증하기", "아래 버튼으로 " + app + " 함께주문 열기", app + "에서 메뉴 담기", "돌아와서 \"메뉴 담았어요\" 누르기"];
+  var doneCount = r.mine ? 1 + (r.opened ? 1 : 0) : (S.verified ? 1 : 0) + (r.opened ? 2 : 0);
+  $("rFlow").innerHTML = flow.map(function (t, i) { return '<li' + (i < doneCount ? ' class="done"' : '') + '>' + esc(t) + '</li>'; }).join("");
+
+  var full = !r.mine && !r.joined && r.people >= r.max;
+  var openBtn = '<a class="cta" id="rOpen" href="' + esc(r.link) + '" target="_blank" rel="noopener">' + app + '에서 메뉴 담기 ↗</a>';
+  if (full) {
+    bar('<button class="cta" disabled>인원이 다 찼어요</button>');
+  } else if (r.mine) {
+    bar(openBtn + '<button class="cta light" id="rClose">모집 마감하고 주문하기 (체험)</button>');
+    $("rClose").onclick = function () { S.phase = 0; go("pickup"); };
+  } else if (!S.verified) {
+    bar('<button class="cta" id="rVerify">학교 인증하고 참여하기</button>');
+    $("rVerify").onclick = function () { needVerify("room"); };
+  } else {
+    bar(openBtn + '<button class="cta light" id="rDone"' + (r.opened ? "" : " disabled") + '>' + (r.opened ? "메뉴 담았어요" : "배달앱에서 메뉴를 담고 돌아와 주세요") + '</button>');
+    $("rDone").onclick = function () {
+      if (!r.joined) { r.joined = true; r.people = Math.min(r.max, r.people + 1); }
+      S.phase = 0; toast("참여 완료! 모집이 끝나면 픽업 안내를 보내드려요"); go("pickup");
+    };
+  }
+  var o = $("rOpen");
+  if (o) o.onclick = function () { r.opened = true; setTimeout(render, 300); };
+}
+
+/* 학교 인증 */
+function renderVerify() {
+  var v = S.v;
+  // 학교
+  var chosen = !!v.school && !v.manual;
+  $("vSchoolPick").hidden = chosen || v.manual;
+  $("vManual").hidden = !v.manual;
+  $("vSchoolChosen").hidden = !chosen;
+  $("vSchoolState").textContent = schoolReady() ? "완료" : "필요";
+  $("vSchoolState").className = "state" + (schoolReady() ? " ok" : "");
+  if (chosen) {
+    $("vSchoolName").textContent = v.school.name;
+    $("vSchoolDomain").textContent = "@" + v.school.domains.join(", @") + " 메일로 인증해요";
+  } else if (!v.manual) {
+    var q = v.q.replace(/\s/g, "").toLowerCase();
+    var hits = q ? SCHOOLS.filter(function (s) { return s.name.replace(/\s/g, "").toLowerCase().indexOf(q) >= 0; }) : SCHOOLS.slice(0, 4);
+    var list = $("vSchoolList"); list.innerHTML = "";
+    hits.slice(0, 6).forEach(function (s) {
+      var b = document.createElement("button");
+      b.innerHTML = '<b></b><span></span>';
+      b.querySelector("b").textContent = s.name; b.querySelector("span").textContent = "@" + s.domains[0];
+      b.onclick = function () { v.school = s; v.domIdx = 0; v.mail = 0; v.dorm = ""; $("vDorm").value = ""; $("vMailErr").hidden = true; render(); };
+      list.appendChild(b);
+    });
+    if (q && !hits.length) list.innerHTML = '<p class="small muted" style="padding: 8px 0">검색 결과가 없어요. 아래에서 직접 입력해 주세요.</p>';
+  }
+  // 기숙사
+  var dc = $("vDormChips"), dorms = chosen && v.school.dorms ? v.school.dorms : [];
+  dc.hidden = !dorms.length; dc.innerHTML = "";
+  dorms.forEach(function (d) {
+    var b = document.createElement("button");
+    b.textContent = d; b.setAttribute("aria-pressed", String(v.dorm === d));
+    b.onclick = function () { v.dorm = d; $("vDorm").value = d; render(); };
+    dc.appendChild(b);
+  });
+  // 이메일
+  var ready = schoolReady();
+  var known = ready && !v.manual;
+  $("vMail").disabled = !ready || v.mail === 2; $("vMailBtn").disabled = !ready;
+  $("vMailWrap").className = "mailwrap" + (!ready || v.mail === 2 ? " dim" : "");
+  $("vMailLabel").textContent = !ready ? "학교를 먼저 골라주세요" : v.manual ? "학교 이메일 (.ac.kr 또는 .edu)" : v.school.name + " 메일 아이디만 입력하세요";
+  $("vMail").placeholder = !ready ? "아이디@학교메일" : v.manual ? "아이디@학교.ac.kr" : "메일 아이디";
+  var suf = $("vMailSuffix");
+  suf.hidden = !known;
+  if (known) suf.textContent = "@" + v.school.domains[v.domIdx || 0];
+  var dch = $("vDomChips"); dch.innerHTML = "";
+  dch.hidden = !(known && v.school.domains.length > 1 && v.mail !== 2);
+  if (!dch.hidden) v.school.domains.forEach(function (d, i) {
+    var b = document.createElement("button");
+    b.textContent = "@" + d; b.setAttribute("aria-pressed", String((v.domIdx || 0) === i));
+    b.onclick = function () { v.domIdx = i; render(); };
+    dch.appendChild(b);
+  });
+  var full = fullEmail();
+  $("vMailFull").hidden = !(known && full && v.mail !== 0);
+  $("vMailFull").textContent = full ? full + "로 인증번호를 보냈어요" : "";
+  $("vMailState").textContent = v.mail === 2 ? "완료" : v.mail === 1 ? "코드 입력" : "필요";
+  $("vMailState").className = "state" + (v.mail === 2 ? " ok" : "");
+  $("vCodeRow").hidden = v.mail !== 1; $("vMailHint").hidden = v.mail !== 1;
+  $("vMailBtn").textContent = v.mail === 2 ? "인증됨" : v.mail === 1 ? "다시 받기" : "코드 받기";
+  Array.prototype.forEach.call($("vGender").children, function (b) { b.setAttribute("aria-pressed", String(v.gender === b.dataset.g)); });
+  $("vAgree").checked = v.agree;
+  var left = [];
+  if (!ready) left.push("학교");
+  if (!v.dorm.trim()) left.push("기숙사");
+  if (v.mail !== 2) left.push("학교 이메일");
+  if (!v.gender) left.push("성별"); if (!v.agree) left.push("동의");
+  var ok = left.length === 0;
+  bar('<button class="cta" id="vGo"' + (ok ? "" : " disabled") + '>' + (ok ? "인증 완료하고 계속하기" : left.join(", ") + " 남음") + '</button>');
+  $("vGo").onclick = function () {
+    S.verified = true; toast("학교 인증 완료 (체험)");
+    if (S.after === "create-submit") createRoom(); else go(S.after === "create" ? "create" : "room");
+  };
+}
+
+/* 픽업 */
+function renderPickup() {
+  var r = S.room, p = S.phase, app = APP_NAME[r.platform];
+  $("kHead").textContent = r.platform + " · " + r.store + " · 참여 " + r.people + "명";
+  $("kTitle").textContent = p === 0 ? "배달 중이에요" : "도착했어요! 로비로 와주세요";
+  var dorm = myPlace().dorm;
+  $("kSub").textContent = p === 0 ? "곧 " + dorm + " 1층 로비에 도착해요" : "봉투 번호를 확인하고 가져가세요";
+  $("kPlace").textContent = dorm + " 1층 로비 · 엘리베이터 옆 테이블";
+  $("kBag").textContent = "#" + r.people;
+  $("kPayNote").textContent = "주문, 결제, 정산은 모두 " + app + " 함께주문 안에서 진행돼요. 같이시켜에는 결제 정보가 저장되지 않아요.";
+  var steps = [["모집 마감", "참여자가 모두 메뉴를 담았어요"], [app + "에서 주문", "방장이 함께주문으로 주문"], ["배달 중", app + " 앱에서 배달 현황 확인"], ["픽업", "도착하면 알림"]];
+  var cur = p === 0 ? 2 : 3;
+  $("kSteps").innerHTML = steps.map(function (s, i) {
+    var cls = i < cur ? "done" : i === cur ? "now" : "todo";
+    return '<li class="' + cls + '"><div class="rail"><span class="dot"></span><span class="stem"></span></div>' +
+      '<div class="txt"><p class="lbl">' + esc(s[0]) + '</p><p class="small muted">' + esc(s[1]) + '</p></div></li>';
+  }).join("");
+  if (p === 0) {
+    bar('<button class="cta" id="kGo">도착 알림 받기 (체험용 빨리감기)</button>');
+    $("kGo").onclick = function () { S.phase = 1; toast("알림: 음식이 " + dorm + " 1층 로비에 도착했어요"); render(); };
+  } else {
+    bar('<button class="cta" id="kGo">수령 완료</button>');
+    $("kGo").onclick = function () { go("done"); };
+  }
+}
+
+/* 완료 */
+function renderDone() {
+  var survey = SURVEY_URL
+    ? '<a class="cta" href="' + SURVEY_URL + '" target="_blank" rel="noopener">설문하러 가기</a>'
+    : '<button class="cta" disabled>설문 링크 준비 중</button>';
+  var beta = BETA_URL ? '<a class="cta light" href="' + BETA_URL + '" target="_blank" rel="noopener">베타테스트 신청하기</a>' : "";
+  $("betaNote").hidden = !BETA_URL;
+  bar(survey + beta + '<button class="cta outline" id="again">처음부터 다시 체험하기</button>');
+  $("again").onclick = function () {
+    S.v = { mail: 0, gender: null, agree: false, school: null, manual: false, manualName: "", dorm: "", q: "" }; S.verified = false; S.filter = "전체";
+    ["vSchoolQ", "vSchoolManual", "vDorm"].forEach(function (id) { $(id).value = ""; });
+    ROOMS = ROOMS.filter(function (r) { return !r.mine; });
+    ROOMS.forEach(function (r) { if (r.joined) { r.people -= 1; } r.joined = false; r.opened = false; });
+    $("vMail").value = ""; $("vCode").value = "";
+    go("intro");
+  };
+}
+
+function renderIntro() {
+  bar('<button class="cta" id="startGo">체험 시작하기</button>');
+  $("startGo").onclick = function () { go("home"); };
+}
+
+function render() {
+  ({ intro: renderIntro, home: renderHome, create: renderCreate, room: renderRoom, verify: renderVerify, pickup: renderPickup, done: renderDone })[S.screen]();
+}
+
+document.querySelectorAll("[data-go]").forEach(function (b) { b.onclick = function () { go(b.dataset.go); }; });
+$("newRoom").onclick = function () { go("create"); };
+$("vBack").onclick = function () { go(S.after === "room" ? "room" : "create"); };
+Array.prototype.forEach.call($("cApp").children, function (b) { b.onclick = function () { S.c.app = b.dataset.app; render(); }; });
+$("cLink").addEventListener("input", function () { onLinkInput(this.value); });
+$("cStore").addEventListener("input", function () { S.c.store = this.value; S.c.storeAuto = false; S.c.storeTried = ""; autoCat(); render(); });
+$("cSample").onclick = function () {
+  var sample = "[배달의민족] 교촌치킨 한대점 함께주문에 초대합니다! 메뉴를 담아주세요 " + APP_HOME["배민"] + "/share/example";
+  $("cLink").value = sample; S.c.store = ""; S.c.storeAuto = false; onLinkInput(sample);
+  toast("예시 공유 문구를 붙여넣었어요");
+};
+$("rCopy").onclick = function () {
+  var text = S.room.link;
+  var done = function () { toast("링크를 복사했어요"); };
+  try {
+    navigator.clipboard.writeText(text).then(done, function () { selectLink(); });
+  } catch (e) { selectLink(); }
+};
+function selectLink() {
+  var el = $("rLink"), range = document.createRange(); range.selectNodeContents(el);
+  var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+  toast("링크를 선택했어요. 길게 눌러 복사해 주세요");
+}
+$("vMailBtn").onclick = function () {
+  if (S.v.mail === 2) return;
+  if (!schoolReady()) return;
+  var err = $("vMailErr"), raw = $("vMail").value.trim(), m = fullEmail();
+  if (!S.v.manual) {
+    var at = raw.indexOf("@");
+    if (at >= 0) {
+      var typed = raw.slice(at + 1).toLowerCase();
+      var idx = S.v.school.domains.indexOf(typed);
+      if (idx >= 0) S.v.domIdx = idx;
+      else if (typed && domainOk(raw)) { S.v.school.domains.push(typed); S.v.domIdx = S.v.school.domains.length - 1; }
+      else if (typed) { err.textContent = S.v.school.name + " 메일(@" + S.v.school.domains.join(", @") + ")만 쓸 수 있어요. 아이디만 입력해 주세요."; err.hidden = false; return; }
+      $("vMail").value = raw.slice(0, at); m = fullEmail();
+    }
+    if (!/^[A-Za-z0-9._%+-]+$/.test($("vMail").value.trim())) { err.textContent = "메일 아이디를 확인해 주세요. 영문, 숫자, 점(.)만 쓸 수 있어요."; err.hidden = false; return; }
+  } else if (!/^[^@\s]+@[^@\s]+$/.test(m) || !domainOk(m)) {
+    err.textContent = ".ac.kr 또는 .edu로 끝나는 학교 이메일을 넣어주세요."; err.hidden = false; return;
+  }
+  err.hidden = true; S.v.mail = 1; toast("인증번호를 보냈어요 (체험)"); render(); $("vCode").focus();
+};
+$("vCodeBtn").onclick = function () {
+  var err = $("vMailErr");
+  if (!/^\d{6}$/.test($("vCode").value.trim())) { err.textContent = "숫자 6자리를 넣어주세요."; err.hidden = false; return; }
+  err.hidden = true; S.v.mail = 2; render();
+};
+Array.prototype.forEach.call($("vGender").children, function (b) { b.onclick = function () { S.v.gender = b.dataset.g; render(); }; });
+$("vAgree").onchange = function () { S.v.agree = this.checked; render(); };
+$("vSchoolQ").addEventListener("input", function () { S.v.q = this.value; render(); });
+$("vNoSchool").onclick = function () { S.v.manual = true; S.v.school = null; S.v.mail = 0; render(); $("vSchoolManual").focus(); };
+$("vBackToList").onclick = function () { S.v.manual = false; S.v.mail = 0; render(); };
+$("vSchoolManual").addEventListener("input", function () { S.v.manualName = this.value; S.v.mail = 0; render(); });
+$("vSchoolChange").onclick = function () { S.v.school = null; S.v.domIdx = 0; S.v.mail = 0; $("vMail").value = ""; S.v.q = ""; $("vSchoolQ").value = ""; $("vMailErr").hidden = true; render(); $("vSchoolQ").focus(); };
+$("vDorm").addEventListener("input", function () { S.v.dorm = this.value; render(); });
+
+render();
+</script>
